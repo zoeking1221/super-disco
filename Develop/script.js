@@ -1,78 +1,20 @@
 // diplay current date in header of page
 $("#currentDay").append(moment().format('dddd') + ", " + moment().format('MMMM Do'));
 
-// empty task array to add to from local storage
-taskArray = ["", "", "", "", "", "", "", "", ""];
+// global variables
+hourArray = [9, 10, 11, 12, 13, 14, 15, 16, 17]
+textareaArray = ["#9amtext", "#10amtext", "#11amtext", "#12pmtext", "#1pmtext", "#2pmtext",
+"#3pmtext", "#4pmtext", "#5pmtext"];
 
 
-// when user clicks on save icon:
-    // get value of text input
-    // save to local storage 
-    // add to taskArray
-$("#9ambtn").on("click", function() {
-    var hour9Text = $("#9amtext").val().trim();
-    console.log(hour9Text);
-    localStorage.setItem("9am", hour9Text);
-    taskArray[0] = hour9Text;
+// save items to local storage
+$(".saveBtn").on("click", function() {
+    var hourId = $(this).attr("id");
+    var textArea = $(this).siblings("textarea");
+    var hourText = textArea.val().trim();
+    localStorage.setItem(hourId, hourText);
+    
 });
-
-$("#10ambtn").on("click", function() {
-    var hour10Text = $("#10amtext").val().trim();
-    console.log(hour10Text);
-    localStorage.setItem("10am", hour10Text);
-    taskArray[1] = hour10Text;
-});
-
-$("#11ambtn").on("click", function() {
-    var hour11Text = $("#11amtext").val().trim();
-    console.log(hour11Text);
-    localStorage.setItem("11am", hour11Text);
-    taskArray[2] = hour11Text;
-});
-
-$("#12pmbtn").on("click", function() {
-    var hour12Text = $("#12pmtext").val().trim();
-    console.log(hour12Text);
-    localStorage.setItem("12pm", hour12Text);
-    taskArray[3] = hour12Text;
-});
-
-$("#1pmbtn").on("click", function() {
-    var hour1Text = $("#1pmtext").val().trim();
-    console.log(hour1Text);
-    localStorage.setItem("1pm", hour1Text);
-    taskArray[4] = hour1Text;
-});
-
-$("#2pmbtn").on("click", function() {
-    var hour2Text = $("#2pmtext").val().trim();
-    console.log(hour2Text);
-    localStorage.setItem("2pm", hour2Text);
-    taskArray[5] = hour2Text;
-});
-
-$("#3pmbtn").on("click", function() {
-    var hour3Text = $("#3pmtext").val().trim();
-    console.log(hour3Text);
-    localStorage.setItem("3pm", hour3Text);
-    taskArray[6] = hour3Text;
-});
-
-$("#4pmbtn").on("click", function() {
-    var hour4Text = $("#4pmtext").val().trim();
-    console.log(hour4Text);
-    localStorage.setItem("4pm", hour4Text);
-    taskArray[7] = hour4Text;
-});
-
-$("#5pmbtn").on("click", function() {
-    var hour5Text = $("#5pmtext").val().trim();
-    console.log(hour5Text);
-    localStorage.setItem("5pm", hour5Text);
-    taskArray[8] = hour5Text;
-});
-
-
 
 // get items from local storage so that they reappear 
 var loadTasks = function () {
@@ -108,9 +50,21 @@ loadTasks();
 
 
 
+// for each time block, compare current time to that of time block and color code accordingly:
+// if current hour equal to time block hour, set time block to present 
+// if current hour less than time block hour, set time block to future
+// if current hour greater than time block hour, set time block to past
+var currentHour = moment().hours();
+for (var i = 0; i < hourArray.length; i++) {
+    if (currentHour == hourArray[i]) {
+        $(textareaArray[i]).addClass("present");
+    }
+    else if (currentHour < hourArray[i]) {
+        $(textareaArray[i]).addClass("future");
+    }
+    else {
+        $(textareaArray[i]).addClass("past");
+    }
+}
 
-// // color code based on time of task vs time of day
-//     if (moment().isBetween('22:00', '23:30')) {
-//    console.log("working");
-//     };
-  
+
